@@ -1,0 +1,26 @@
+{
+  "name": "E-Commerce-Book-Store-MERN-App",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sniro84/E-Commerce-Book-Store-MERN-App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sniro84/E-Commerce-Book-Store-MERN-App/issues"
+  },
+  "homepage": "https://github.com/sniro84/E-Commerce-Book-Store-MERN-App#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.7.10",
+    "nodemon": "^1.19.4"
+  }
+}
