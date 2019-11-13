@@ -9,7 +9,7 @@ exports.signup = (req,res) => {
     const user = new User(req.body);
     user.save( (err,user) => {
         if (err) {
-            res.status(400).json({
+            return res.status(400).json({
                 error: errorHandler(err)
             });
         }
@@ -28,14 +28,13 @@ exports.signin = (req, res) => {
                 error: "User with specified email doesn't exist. Please signup"
             });
         }
-        // if user is found, make sure email and password match
-        // create authenticate method in user model
-        if (!user.authenticate(password)) {
+        
+        // if user is found, make sure email and password match        
+        if (!user.authenticate(password)) { // authenticate method is in the user model
             return res.status(401).json({
                 error: "Email and password don't match"
             });
         }
-
 
         // generate a signed token with user id and secret
         const token = jwt.sign({ _id: user._id } , process.env.JWT_SECRET);
