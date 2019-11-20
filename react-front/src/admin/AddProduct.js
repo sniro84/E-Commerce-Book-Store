@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Layout from '../core/Layout';
 import { isAuthenticated } from '../auth';
 import { Link } from 'react-router-dom';
-import { createProduct } from './apiAdmin';
+import { createProduct , getCategories } from './apiAdmin';
 
 const AddProduct = () => {
 
@@ -37,10 +37,20 @@ const AddProduct = () => {
         createdProduct,
         redirectToProfile,
         formData    
-     } = values;
+    } = values;
+
+    // load categories and set form data
+    const init = () => {
+        getCategories().then( (data) => {
+            if (data.error)
+                setValues({ ...values , error: data.error});
+            else
+                setValues({ ...values , categories: data , formData: new FormData() });    
+        });
+    };
 
     useEffect( () => {
-        setValues({ ...values , formData: new FormData() });
+         init();
     } , []); 
 
     
@@ -52,7 +62,7 @@ const AddProduct = () => {
     
     const clickSubmit = (event) => {
         event.preventDefault();
-        setValues({ ...values , error: "" , loading: true });
+        setValues({ ...values , error: "", loading: true });
         createProduct(user._id, token, formData)
             .then( (data) => {
                 if (data.error) 
@@ -66,6 +76,7 @@ const AddProduct = () => {
                          price: "",
                          quantity: "",
                          loading: false,
+                         error: "",
                          createdProduct: data.name
                   })
                 }    
@@ -118,14 +129,19 @@ const AddProduct = () => {
             <div className="form-group">
                 <label className="text-muted">Category</label>
                 <select onChange={handleChange("category")} className="form-control">
-                    <option value="5dcd34f521a8ff11ec4d098a">Node</option>
-                    <option value="5dd391c35cc8d7112c317f19">Javascript</option>
+                    <option>Select Category</option>
+                    { categories && categories.map( (category, index) => (
+                        <option key={index} value={category._id}>
+                             {category.name}
+                        </option>
+                    )) }
                 </select>     
             </div>
 
             <div className="form-group">
                 <label className="text-muted">Shipping</label>
                 <select onChange={handleChange("shipping")} className="form-control">
+                    <option>Select Shipping</option>
                     <option value="0">No</option>
                     <option value="1">Yes</option>
                 </select>     
@@ -146,6 +162,31 @@ const AddProduct = () => {
         </form>
     ); 
 
+    const showError = () => (
+        error && (
+            <div className="alert alert-danger">
+                { error }
+            </div>
+        )
+    );
+    
+    const showSuccess = () => (
+        createdProduct && (
+            <div className="alert alert-info">
+                <h2> {`'${createdProduct}' has been created successfully.`} </h2>
+            </div>
+        ) 
+    );
+
+    const showLoading = () => (
+        loading && (
+            <div className="alert alert-info">
+                <h2> Loading... </h2>
+            </div>
+        )
+    );
+        
+
     return (
         <Layout 
             title="Add Product" 
@@ -153,6 +194,9 @@ const AddProduct = () => {
         >
             <div className="row">
                 <div className="col-md-8 offset-md-2">
+                    { showLoading() }
+                    { showSuccess() }
+                    { showError() }
                     { newPostForm() }
                 </div>
             </div>    

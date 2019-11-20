@@ -71,7 +71,7 @@ const Signin = () => {
 
     const showLoading = () => (
         loading && 
-            <div classname="alert alert-info">
+            <div className="alert alert-info">
                 <h2>Loading...</h2>
             </div>            
     );
