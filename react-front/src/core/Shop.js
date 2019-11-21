@@ -3,6 +3,8 @@ import Layout from './Layout';
 import Card from './Card';
 import { getCategories } from './apiCore';
 import Checkbox from './Checkbox';
+import Radiobox from './Radiobox';
+import { prices } from './fixedPrices';
 
 const Shop = () => {
 
@@ -43,6 +45,14 @@ const Shop = () => {
                             handleFilters={ (filters) => handleFilters(filters, 'category')}
                         />
                     </ul>
+
+                    <h4>Filter By Price Range</h4>
+                    <div>
+                        <Radiobox 
+                            prices={prices} 
+                            handleFilters={ (filters) => handleFilters(filters, 'price')}
+                        />
+                    </div>
                 </div>
                 <div className="col-8">
                     {JSON.stringify(myFilters)}
