@@ -66,7 +66,7 @@ const AddProduct = () => {
         createProduct(user._id, token, formData)
             .then( (data) => {
                 if (data.error) 
-                    setValues({ ...values , error: data.error });
+                    setValues({ ...values, error: data.error, createdProduct: null }); 
                 else {
                     setValues({
                          ...values,
@@ -77,7 +77,8 @@ const AddProduct = () => {
                          quantity: "",
                          loading: false,
                          error: "",
-                         createdProduct: data.name
+                         createdProduct: data.name,
+                         formData: new FormData()
                   })
                 }    
             });
@@ -162,20 +163,22 @@ const AddProduct = () => {
         </form>
     ); 
 
-    const showError = () => (
-        error && (
-            <div className="alert alert-danger">
-                { error }
-            </div>
-        )
+    const showError = () => (  
+        <div 
+            className="alert alert-danger" 
+            style={{ display: (error) ? "" : "none" }}
+        >
+            { error }
+        </div>
     );
     
     const showSuccess = () => (
-        createdProduct && (
-            <div className="alert alert-info">
-                <h2> {`'${createdProduct}' has been created successfully.`} </h2>
-            </div>
-        ) 
+        <div 
+            className="alert alert-info" 
+            style={{ display: (createdProduct) ? "" : "none" }}
+        >
+            <h2> {`'${createdProduct}' has been created successfully.`} </h2>
+        </div> 
     );
 
     const showLoading = () => (
