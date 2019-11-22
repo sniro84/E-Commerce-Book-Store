@@ -1,18 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
 import Card from './Card';
-import { getCategories } from './apiCore';
+import { getCategories , getFilteredProducts } from './apiCore';
 import Checkbox from './Checkbox';
 import Radiobox from './Radiobox';
 import { prices } from './fixedPrices';
+
 
 const Shop = () => {
 
     const [myFilters, setMyFilters] = useState({
         filters: { category: [], price: [] }
     });
+
     const [categories, setCategories] = useState([]);
     const [error, setError] = useState(false);
+    const [limit, setLimit] = useState(6);
+    const [skip, setSkip] = useState(0);
+    const [size, setSize] = useState(0);
+    const [filteredResults, setFilteredResults] = useState([]);
+
 
     // load categories and set form data
     const init = () => {
@@ -24,15 +31,76 @@ const Shop = () => {
         });
     };
 
+    const loadFilteredResults = (newFilters) => {
+        // console.log(newFilters);
+        getFilteredProducts(skip, limit, newFilters)
+            .then( (results) => {
+                if (results.error)
+                    setError(results.error);
+                else {
+                    setFilteredResults(results.data);
+                    setSize(results.size);
+                    setSkip(0);
+                }
+            });
+    };
+
+    const loadMore = () => {
+        let toSkip = skip + limit; 
+        getFilteredProducts(toSkip, limit, myFilters.filters)
+            .then( (results) => {
+                if (results.error)
+                    setError(results.error);
+                else {
+                    setFilteredResults([ ...filteredResults , ...results.data ]);
+                    setSize(results.size);
+                    setSkip(toSkip);
+                }
+            });
+    };
+
+    const loadMoreButton = () => (
+        (size > 0 && size >= limit) && (
+            <button 
+                onClick={loadMore} 
+                className="btn btn-warning mb-5"
+            >
+                Load more
+            </button>
+        )
+    );
+
+
     useEffect( () => {
         init();
+        loadFilteredResults(skip, limit, myFilters.filters);
     }, []);
 
     const handleFilters = (filters, filterBy) => {
         const newFilters = { ...myFilters };
         newFilters.filters[filterBy] = filters;
+
+        if (filterBy === "price") {
+            let priceValues = handlePrice(filters);
+            newFilters.filters[filterBy] = priceValues;
+        }
+        loadFilteredResults(myFilters.filters);
         setMyFilters(newFilters);
     };
+
+    const handlePrice = (value) => {
+        const data = prices;
+        let pricesArray = [];
+
+        for(let key in data) {
+            if (data[key]._id === parseInt(value))
+                pricesArray = data[key].array;
+        }
+
+        return pricesArray;
+    };
+
+    
 
     return (
         <Layout title="Shop Page" description="Search and find books of your choice" className="container-fluid">
@@ -55,7 +123,14 @@ const Shop = () => {
                     </div>
                 </div>
                 <div className="col-8">
-                    {JSON.stringify(myFilters)}
+                    <h2 className="mb-4">Products</h2>
+                    <div className="row">
+                        {filteredResults.map( (product, index) => (
+                            <Card key={index} product={product} /> 
+                        ))}
+                    </div>
+                    <hr/>
+                    { loadMoreButton() }
                 </div>
             </div>
         </Layout>
