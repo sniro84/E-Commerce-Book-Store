@@ -10,6 +10,7 @@ import AdminDashboard from './user/AdminDashboard';
 import AddCategory from './admin/AddCategory';
 import AddProduct from './admin/AddProduct';
 import Shop from './core/Shop';
+import Product from './core/Product';
 
 const Routes = () => (
     <BrowserRouter>
@@ -18,6 +19,7 @@ const Routes = () => (
             <Route exact path="/shop" component={Shop} />
             <Route exact path="/signin" component={Signin} />
             <Route exact path="/signup" component={Signup} />
+            <Route exact path="/product/:productId" component={Product} />
             <PrivateRoute exact path="/user/dashboard" component={Dashboard} />
             <AdminRoute exact path="/admin/dashboard" component={AdminDashboard} />
             <AdminRoute exact path="/create/category" component={AddCategory} />
