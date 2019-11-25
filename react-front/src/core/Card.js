@@ -17,7 +17,7 @@ const Card = ({ product, showViewProductButton = true }) => {
         return (
             showViewProductButton && (
                 <Link to={`/product/${product._id}`} className="mr-2">
-                    <button className="btn btn-outline-primary mt-2 mb-2 mr-3">
+                    <button className="btn btn-outline-primary mt-2 mb-2 mr-2 font-weight-bold">
                         View Product
                     </button>
                 </Link>
@@ -28,8 +28,8 @@ const Card = ({ product, showViewProductButton = true }) => {
 
     const showAddToCartButton = () => {
         return (
-            <button className="btn btn-outline-warning mt-2 mb-2">
-                Add to cart
+            <button className="btn btn-outline-warning mt-2 mb-2 font-weight-bold">
+                Add to Cart
             </button>
         );
     };
