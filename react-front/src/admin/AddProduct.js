@@ -193,7 +193,7 @@ const AddProduct = () => {
     return (
         <Layout 
             title="Add Product" 
-            description={`Welcome, ${user.name}! ready to add a new product?`}
+            description={`Welcome, ${user.name}! Ready To Add A New Product?`}
         >
             <div className="row">
                 <div className="col-md-8 offset-md-2">

@@ -103,7 +103,7 @@ const Shop = () => {
     
 
     return (
-        <Layout title="Shop Page" description="Search and find books of your choice" className="container-fluid">
+        <Layout title="Shop Page" description="Search And Find Books Of Your Choice" className="container-fluid">
             <div className="row">
                 <div className="col-4">
                     <h4>Filter By Categories</h4>
